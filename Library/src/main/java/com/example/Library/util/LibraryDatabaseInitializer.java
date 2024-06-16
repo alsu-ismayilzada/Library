@@ -28,14 +28,12 @@ public class LibraryDatabaseInitializer implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        seedAuthors();
-
-        seedPublishingHouses();
-
-        seedBooks();
+        addAuthors();
+        addPublishingHouses();
+        addBooks();
     }
 
-    private void seedAuthors() {
+    private void addAuthors() {
         Author author1 = new Author("J. R. R. Tolkien", LocalDate.of(1892, 1, 3));
         Author author2 = new Author("Harper Lee", LocalDate.of(1926, 4, 28));
         Author author3 = new Author("Mary Shelley", LocalDate.of(1797, 8, 31));
@@ -50,7 +48,7 @@ public class LibraryDatabaseInitializer implements CommandLineRunner {
         authorRepository.saveAll(List.of(author1, author2, author3, author4, author5, author6, author7, author8, author9, author10));
     }
 
-    private void seedPublishingHouses() {
+    private void addPublishingHouses() {
 
         PublishingHouse publishingHouse1 = new PublishingHouse("Houghton Mifflin Harcourt");
         PublishingHouse publishingHouse2 = new PublishingHouse("HarperCollins");
@@ -64,7 +62,7 @@ public class LibraryDatabaseInitializer implements CommandLineRunner {
         publishingHouseRepository.saveAll(List.of(publishingHouse1, publishingHouse2, publishingHouse3, publishingHouse4, publishingHouse5, publishingHouse6, publishingHouse7, publishingHouse8));
     }
 
-    private void seedBooks() {
+    private void addBooks() {
         List<Author> authors = authorRepository.findAll();
         List<PublishingHouse> publishingHouses = publishingHouseRepository.findAll();
 
