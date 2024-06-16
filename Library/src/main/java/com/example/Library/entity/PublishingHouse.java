@@ -12,7 +12,6 @@ import java.util.List;
 @Entity
 @Table(name = "publishing-houses")
 @AllArgsConstructor
-@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PublishingHouse {
 
@@ -20,6 +19,13 @@ public class PublishingHouse {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String name;
+
+    public PublishingHouse() {
+    }
+
+    public PublishingHouse(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;

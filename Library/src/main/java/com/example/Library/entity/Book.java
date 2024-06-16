@@ -12,7 +12,6 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "books")
 @AllArgsConstructor
-@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Book {
     @Id
@@ -27,6 +26,16 @@ public class Book {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "publishing_house_id", referencedColumnName = "id")
     PublishingHouse publishingHouse;
+
+    public Book() {
+    }
+
+    public Book(String title, LocalDate publishDate, Author author, PublishingHouse publishingHouse) {
+        this.title = title;
+        this.publishDate = publishDate;
+        this.author = author;
+        this.publishingHouse = publishingHouse;
+    }
 
     public Long getId() {
         return id;

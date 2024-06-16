@@ -2,10 +2,7 @@ package com.example.Library.entity;
 
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
@@ -14,7 +11,6 @@ import java.util.List;
 @Entity
 @Table(name = "authors")
 @AllArgsConstructor
-@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Author {
 
@@ -23,6 +19,14 @@ public class Author {
     Long id;
     String fullName;
     LocalDate birthdayDate;
+
+    public Author() {
+    }
+
+    public Author(String fullName, LocalDate birthdayDate) {
+        this.fullName = fullName;
+        this.birthdayDate = birthdayDate;
+    }
 
     public Long getId() {
         return id;
