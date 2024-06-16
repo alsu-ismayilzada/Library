@@ -7,23 +7,35 @@ import com.example.Library.dto.BookDto;
 import com.example.Library.entity.Author;
 import com.example.Library.entity.Book;
 import com.example.Library.entity.PublishingHouse;
+import com.example.Library.exception.ResourceNotFoundException;
 import com.example.Library.mapper.AuthorMapper;
 import com.example.Library.mapper.BookMapper;
 import com.example.Library.mapper.PublishingHouseMapper;
 import com.example.Library.service.BookService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final BookMapper bookMapper;
     private final AuthorRepository authorRepository;
+    private final AuthorMapper authorMapper;
     private final PublishingHouseRepository publishingHouseRepository;
+    private final PublishingHouseMapper publishingHouseMapper;
+
+    public BookServiceImpl(BookRepository bookRepository, BookMapper bookMapper, AuthorRepository authorRepository, AuthorMapper authorMapper, PublishingHouseRepository publishingHouseRepository, PublishingHouseMapper publishingHouseMapper) {
+        this.bookRepository = bookRepository;
+        this.bookMapper = bookMapper;
+        this.authorRepository = authorRepository;
+        this.authorMapper = authorMapper;
+        this.publishingHouseRepository = publishingHouseRepository;
+        this.publishingHouseMapper = publishingHouseMapper;
+
+    }
+
 
     @Override
     public List<BookDto> findAllBooks() {
@@ -31,7 +43,8 @@ public class BookServiceImpl implements BookService {
     }
     @Override
     public BookDto findBookById(Long id) {
-        return bookRepository.findById(id).stream().map(bookMapper::toBookDto).findFirst().get();
+        Book newBook = findById(id);
+        return bookMapper.toBookDto(newBook);
     }
     @Override
     public void saveBook(BookDto bookDto) {
@@ -41,15 +54,29 @@ public class BookServiceImpl implements BookService {
     }
     @Override
     public void deleteBook(Long id) {
-        bookRepository.deleteById(id);
+        Book newBook = findById(id);
+        bookRepository.delete(newBook);
+    }
+
+    @Override
+    public BookDto updateBook(Long id, BookDto bookDto) {
+        Book newBook = findById(id);
+
+        newBook.setAuthor(authorMapper.toAuthorEntity(bookDto.author()));
+        newBook.setPublishingHouse(publishingHouseMapper.toPublishingHouseEntity((bookDto.publishingHouse())));
+        newBook.setPublishDate(bookDto.publishDate());
+        newBook.setTitle(bookDto.title());
+        bookRepository.save(newBook);
+        return bookMapper.toBookDto(newBook);
     }
 
     private Author createAuthorIfNotExist( BookDto bookDto){
-        Author author = authorRepository.findAuthorByName(bookDto.author().name());
+        Author author = authorRepository.findAuthorByFullName(bookDto.author().fullName());
 
         if(!authorIsExist(author)) {
             author = new Author();
-            author.setName(bookDto.author().name());
+            author.setFullName(bookDto.author().fullName());
+            author.setBirthdayDate(bookDto.author().birthdayDate());
             authorRepository.save(author);
             return author;
         }else{
@@ -89,5 +116,10 @@ public class BookServiceImpl implements BookService {
         book.setAuthor(author);
         book.setPublishingHouse(publishingHouse);
         bookRepository.save(book);
+    }
+
+    private Book findById(Long id){
+        Book newBook = bookRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No author data found with this id."));
+        return newBook;
     }
 }

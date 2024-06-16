@@ -1,6 +1,7 @@
 package com.example.Library.controller;
 
 import com.example.Library.dto.BookDto;
+import com.example.Library.entity.Book;
 import com.example.Library.service.BookService;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.*;
@@ -32,5 +33,9 @@ public class BookController {
     @PostMapping
     void saveBook(@RequestBody BookDto bookDto){
         bookService.saveBook(bookDto);
+    }
+    @PutMapping("/update/{id}")
+    BookDto updateBook(@PathVariable Long id, @RequestBody BookDto bookDto){
+        return bookService.updateBook(id,bookDto);
     }
 }

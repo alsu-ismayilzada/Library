@@ -13,4 +13,5 @@ public interface PublishingHouseService {
     PublishingHouseDto findPublishingHouseById(Long id);
     void savePublishingHouse(PublishingHouseDto publishingHouseDto);
     void deletePublishingHouse(Long id);
+    PublishingHouseDto updatePublishingHouse(Long id, PublishingHouseDto publishingHouseDto);
 }

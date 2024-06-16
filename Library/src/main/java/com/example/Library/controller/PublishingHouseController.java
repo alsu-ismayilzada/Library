@@ -32,4 +32,9 @@ public class PublishingHouseController {
     void savePublishingHouse(@RequestBody PublishingHouseDto publishingHouseDto){
         publishingHouseService.savePublishingHouse(publishingHouseDto);
     }
+
+    @PutMapping("/update/{id}")
+    PublishingHouseDto updatePublishingHouseDto(@PathVariable Long id, @RequestBody PublishingHouseDto publishingHouseDto){
+        return publishingHouseService.updatePublishingHouse(id,publishingHouseDto);
+    }
 }
