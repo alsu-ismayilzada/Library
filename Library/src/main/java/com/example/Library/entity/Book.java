@@ -1,76 +1,94 @@
 package com.example.Library.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Set;
+
+import static jakarta.persistence.FetchType.EAGER;
 
 @Entity
+@Data
+@Setter
+@Getter
 @Table(name = "books")
 @AllArgsConstructor
+@NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     String title;
+    String description;
     LocalDate publishDate;
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "author_id", referencedColumnName = "id")
-    Author author;
+    BigDecimal price;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = EAGER)
+    @JoinTable(
+            name="book_author",
+            joinColumns = @JoinColumn(name = "book_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    Set<Author> authors;
+
+    @ManyToOne()
     @JoinColumn(name = "publishing_house_id", referencedColumnName = "id")
     PublishingHouse publishingHouse;
 
-    public Book() {
-    }
-
-    public Book(String title, LocalDate publishDate, Author author, PublishingHouse publishingHouse) {
-        this.title = title;
-        this.publishDate = publishDate;
-        this.author = author;
-        this.publishingHouse = publishingHouse;
-    }
-
     public Long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public LocalDate getPublishDate() {
-        return publishDate;
-    }
-
-    public Author getAuthor() {
-        return author;
-    }
-
-    public PublishingHouse getPublishingHouse() {
-        return publishingHouse;
     }
 
     public void setId(Long id) {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getPublishDate() {
+        return publishDate;
     }
 
     public void setPublishDate(LocalDate publishDate) {
         this.publishDate = publishDate;
     }
 
-    public void setAuthor(Author author) {
-        this.author = author;
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public Set<Author> getAuthors() {
+        return authors;
+    }
+
+    public void setAuthors(Set<Author> authors) {
+        this.authors = authors;
+    }
+
+    public PublishingHouse getPublishingHouse() {
+        return publishingHouse;
     }
 
     public void setPublishingHouse(PublishingHouse publishingHouse) {

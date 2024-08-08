@@ -1,4 +1,4 @@
-package com.example.Library.dto;
+package com.example.Library.dto.response;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
@@ -15,14 +15,23 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = PRIVATE)
-public class BookDto{
+public class BookResponse{
 
+    Long id;
     String title;
     LocalDate publishDate;
     String description;
     BigDecimal price;
-    Set<Long> authors;
-    Long publishingHouse;
+    Set<String> authors;
+    String publishingHouse;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -56,19 +65,19 @@ public class BookDto{
         this.price = price;
     }
 
-    public Set<Long> getAuthors() {
+    public Set<String> getAuthors() {
         return authors;
     }
 
-    public void setAuthors(Set<Long> authors) {
+    public void setAuthors(Set<String> authors) {
         this.authors = authors;
     }
 
-    public Long getPublishingHouse() {
+    public String getPublishingHouse() {
         return publishingHouse;
     }
 
-    public void setPublishingHouse(Long publishingHouse) {
+    public void setPublishingHouse(String publishingHouse) {
         this.publishingHouse = publishingHouse;
     }
 }

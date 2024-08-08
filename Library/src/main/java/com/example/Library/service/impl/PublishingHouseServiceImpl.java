@@ -7,8 +7,12 @@ import com.example.Library.exception.ResourceNotFoundException;
 import com.example.Library.mapper.PublishingHouseMapper;
 import com.example.Library.service.PublishingHouseService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
+
 @Service
 public class PublishingHouseServiceImpl implements PublishingHouseService {
 
@@ -26,7 +30,7 @@ public class PublishingHouseServiceImpl implements PublishingHouseService {
 
     @Override
     public PublishingHouseDto findPublishingHouseById(Long id) {
-        PublishingHouse newPublishingHouse = findById(id);
+        PublishingHouse newPublishingHouse = getAuthorIfExist(id);
         return publishingHouseMapper.toPublishingHouseDto(newPublishingHouse);
     }
 
@@ -37,21 +41,23 @@ public class PublishingHouseServiceImpl implements PublishingHouseService {
 
     @Override
     public void deletePublishingHouse(Long id) {
-        PublishingHouse newPublishingHouse = findById(id);
+        PublishingHouse newPublishingHouse = getAuthorIfExist(id);
         publishingHouseRepository.delete(newPublishingHouse);
     }
 
     @Override
     public PublishingHouseDto updatePublishingHouse(Long id, PublishingHouseDto publishingHouseDto) {
-        PublishingHouse newPublishingHouse = findById(id);
-        newPublishingHouse.setName(publishingHouseDto.name());
+        PublishingHouse newPublishingHouse = getAuthorIfExist(id);
+        newPublishingHouse.setName(publishingHouseDto.getName());
 
         publishingHouseRepository.save(newPublishingHouse);
         return publishingHouseMapper.toPublishingHouseDto(newPublishingHouse);
     }
 
-    private PublishingHouse findById(Long id){
-        PublishingHouse newPublishingHouse = publishingHouseRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No author data found with this id."));
-        return newPublishingHouse;
-    }
+    @Override
+    public  PublishingHouse getAuthorIfExist(Long id){
+        return publishingHouseRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, String.format(
+                "PublishingHouse with id [%d] was not found!", id
+        )));    }
+
 }

@@ -1,0 +1,114 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: Alsu Ismayilzade
+      changes:
+        - insert:
+            tableName: publishing_houses
+            columns:
+              - column:
+                  name: name
+                  value: 'Penguin Random House'
+              - column:
+                  name: address
+                  value: '1745 Broadway, New York, NY 10019'
+              - column:
+                  name: email
+                  value: 'contact@penguinrandomhouse.com'
+
+        - insert:
+            tableName: publishing_houses
+            columns:
+              - column:
+                  name: name
+                  value: 'HarperCollins'
+              - column:
+                  name: address
+                  value: '195 Broadway, New York, NY 10007'
+              - column:
+                  name: email
+                  value: 'contact@harpercollins.com'
+
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: full_name
+                  value: 'J.K. Rowling'
+              - column:
+                  name: birthday_date
+                  value: '1965-07-31'
+              - column:
+                  name: email
+                  value: 'jk.rowling@example.com'
+
+        - insert:
+            tableName: authors
+            columns:
+              - column:
+                  name: full_name
+                  value: 'George R.R. Martin'
+              - column:
+                  name: birthday_date
+                  value: '1948-09-20'
+              - column:
+                  name: email
+                  value: 'george.martin@example.com'
+
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'Harry Potter and the Philosopher Stone'
+              - column:
+                  name: description
+                  value: 'A young wizard journey begins.'
+              - column:
+                  name: publish_date
+                  value: '1997-06-26'
+              - column:
+                  name: price
+                  value: 20.00
+              - column:
+                  name: publishing_house_id
+                  value: 1
+
+        - insert:
+            tableName: books
+            columns:
+              - column:
+                  name: title
+                  value: 'A Game of Thrones'
+              - column:
+                  name: description
+                  value: 'The battle for the Iron Throne begins.'
+              - column:
+                  name: publish_date
+                  value: '1996-08-06'
+              - column:
+                  name: price
+                  value: 25.00
+              - column:
+                  name: publishing_house_id
+                  value: 2
+
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 1
+              - column:
+                  name: author_id
+                  value: 1
+
+        - insert:
+            tableName: book_author
+            columns:
+              - column:
+                  name: book_id
+                  value: 2
+              - column:
+                  name: author_id
+                  value: 2

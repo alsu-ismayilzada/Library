@@ -1,4 +1,4 @@
-package com.example.Library.dto;
+package com.example.Library.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,8 +15,9 @@ import static lombok.AccessLevel.PRIVATE;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = PRIVATE)
-public class AuthorDto{
+public class AuthorResponse{
 
+    Long id;
     String fullName;
     LocalDate birthdayDate;
     String email;

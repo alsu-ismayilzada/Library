@@ -3,12 +3,14 @@ package com.example.Library.service.impl;
 import com.example.Library.dao.AuthorRepository;
 import com.example.Library.dto.AuthorDto;
 import com.example.Library.entity.Author;
-import com.example.Library.exception.ResourceNotFoundException;
 import com.example.Library.mapper.AuthorMapper;
 import com.example.Library.service.AuthorService;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+
+import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Service
 public class ServiceImpl implements AuthorService{
@@ -28,7 +30,7 @@ public class ServiceImpl implements AuthorService{
 
     @Override
     public AuthorDto findAuthorById(Long id) {
-        Author newAuthor = findById(id);
+        Author newAuthor = getAuthorIfExist(id);
         return authorMapper.toAuthorDto(newAuthor);
     }
 
@@ -39,21 +41,24 @@ public class ServiceImpl implements AuthorService{
 
     @Override
     public void deleteAuthor(Long id) {
-        Author newAuthor = findById(id);
+        Author newAuthor = getAuthorIfExist(id);
         authorRepository.deleteById(id);
     }
 
     @Override
     public AuthorDto updateAuthor(Long id, AuthorDto authorDto) {
-        Author newAuthor = findById(id);
-        newAuthor.setFullName(authorDto.fullName());
-        newAuthor.setBirthdayDate(authorDto.birthdayDate());
+        Author newAuthor = getAuthorIfExist(id);
+        newAuthor.setFullName(authorDto.getFullName());
+        newAuthor.setBirthdayDate(authorDto.getBirthdayDate());
+        newAuthor.setEmail(authorDto.getEmail());
         authorRepository.save(newAuthor);
         return authorMapper.toAuthorDto(newAuthor);
     }
 
-    private Author findById(Long id){
-        Author newAuthor = authorRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No author data found with this id."));
-        return newAuthor;
+
+    public Author getAuthorIfExist(Long id){
+        return authorRepository.findById(id).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, String.format(
+                "Author with id [%d] was not found!", id
+        )));
     }
 }
